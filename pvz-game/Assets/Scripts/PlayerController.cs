@@ -12,11 +12,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CinemachineCamera _cinCam;
 
     private Vector2 _move;
-
-    // Переменные для таймера отладки (Debug.Log)
-    private float timer = 0f;
-    private float logInterval = 1f; // Интервал в 1 секунду
-
     private void Start()
     {
         currentSpeed = walkSpeed;
@@ -32,7 +27,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Проверяем, зажат ли Shift прямо сейчас через новый Input System (поддерживает и клавиатуру)
         if (Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed)
         {
             currentSpeed = sprintSpeed;
@@ -42,27 +36,10 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-        // Движение персонажа
         _characterController.Move((GetForward() * _move.y + GetRight() * _move.x) * Time.deltaTime * currentSpeed);
 
-        // Логирование трех переменных каждую секунду
     }
 
-    private void HandleDebugLog()
-    {
-        // Прибавляем время кадра к таймеру
-        timer += Time.deltaTime;
-
-        // Когда прошла 1 секунда или больше
-        if (timer >= logInterval)
-        {
-            // Выводим в консоль три переменные (например: currentSpeed, walkSpeed и значение по оси Y у вектора _move)
-            Debug.Log($"Current Speed: {currentSpeed} | Walk Speed: {walkSpeed} | Move Y: {_move.y}");
-
-            // Сбрасываем таймер, сохраняя «хвост» времени для точности
-            timer -= logInterval;
-        }
-    }
 
     private Vector3 GetForward()
     {
